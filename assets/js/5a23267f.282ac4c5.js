@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkhaochen_blog=self.webpackChunkhaochen_blog||[]).push([[4353],{8643:function(s){s.exports=JSON.parse('{"allTagsPath":"/blog/tags","slug":"/blog/tags/aws-s-3","name":"AWS S3","count":1,"permalink":"/blog/tags/aws-s-3"}')}}]);

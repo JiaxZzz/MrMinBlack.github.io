@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkhaochen_blog=self.webpackChunkhaochen_blog||[]).push([[9215],{7333:function(e){e.exports=JSON.parse('{"allTagsPath":"/zh-cn/blog/tags","slug":"/zh-cn/blog/tags/web-development","name":"Web development","count":1,"permalink":"/zh-cn/blog/tags/web-development"}')}}]);

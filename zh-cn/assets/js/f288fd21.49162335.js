@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkhaochen_blog=self.webpackChunkhaochen_blog||[]).push([[5252],{7145:function(e){e.exports=JSON.parse('{"allTagsPath":"/zh-cn/blog/tags","slug":"/zh-cn/blog/tags/receipe","name":"receipe","count":1,"permalink":"/zh-cn/blog/tags/receipe"}')}}]);

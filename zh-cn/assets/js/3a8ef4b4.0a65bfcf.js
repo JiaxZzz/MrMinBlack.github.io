@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkhaochen_blog=self.webpackChunkhaochen_blog||[]).push([[5935],{580:function(a){a.exports=JSON.parse('{"allTagsPath":"/zh-cn/blog/tags","slug":"/zh-cn/blog/tags/django","name":"django","count":1,"permalink":"/zh-cn/blog/tags/django"}')}}]);

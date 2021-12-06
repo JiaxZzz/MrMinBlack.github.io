@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://MrMinBlack.github.io/zh-cn/blog</id>
+    <title>MinBlack Blog</title>
+    <updated>2021-06-15T00:00:00.000Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://MrMinBlack.github.io/zh-cn/blog"/>
+    <subtitle>MinBlack Blog</subtitle>
+    <icon>https://MrMinBlack.github.io/zh-cn/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[理解 JavaScript 中的 This, Bind, Call 和 Apply]]></title>
+        <id>understand-this-in-one-article</id>
+        <link href="https://MrMinBlack.github.io/zh-cn/blog/understand-this-in-one-article"/>
+        <updated>2021-06-15T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[question]]></summary>
+        <content type="html"><![CDATA[<p><img src="/img/JS-Bind.png" alt="question"/></p><p>Many of you may have been asked about <strong>This</strong> keyword in an interview. It is a really important concept in JavaScript yet slightly confusing to new developers. Today let us disscuss <strong>this</strong>, <strong>apply</strong>, <strong>call</strong> and <strong>bind</strong> in JavaScript.</p><h2><strong>This</strong> in JavaScript</h2><p>Not like other programming languages where this always refers to the current instance of the class, <strong>this</strong> in JavaScript depends on how a function is called. The usage of <strong>apply</strong>, <strong>call</strong> and <strong>bind</strong> methods can determine the value of <strong>this</strong>. Let&#x27;s use an example to help us understand <strong>this</strong>.</p><pre><code class="language-javascript">var test = {
+  func: function () {
+    console.log(this.bar);
+  },
+  prop: 1,
+};
+
+var func = test.func;
+var prop = 2;
+
+test.func(); // 1
+func(); // 2
+</code></pre><p>In the example above, we can see that two ways of calling <em>func()</em> generated different results. The reason is that <em>test.func()</em> ran in the context of <em>test</em> where <em>this</em> refers, whereas the secoond <em>func</em> ran in the global context.</p><h2><strong>Call</strong>, <strong>Apply</strong> and <strong>Bind</strong></h2><p>We use call(), apply() and bind() methods to set the this keyword independent of how the function is called. This is especially useful for the callbacks.</p><p>The call() and apply() methods set the this inside the function and immediately executes that function. The only difference between call() and apply() is that the apply() method accepts an array of arguments instead of comma separated values.</p><blockquote><p>function.call(thisArg, arg1, agr2, ...)</p></blockquote><blockquote><p>function.apply(thisArg, <!-- -->[argumentsArr]<!-- -->)</p></blockquote><p>The code below will help us understand how call() and apply() work:</p><pre><code class="language-javascript">Function.prototype.call = (context, ...args) =&gt; {
+  context =
+    context === undefined || context === null ? window : Object(context);
+  context.fn = this;
+  const result = context.fn(...args);
+  delete context.fn;
+  return result;
+};
+</code></pre><pre><code class="language-javascript">Function.prototype.apply = (context, args) =&gt; {
+  context =
+    context === undefined || context === null ? window : Object(context);
+  context.fn = this;
+  const result = args ? context.fn(...args) : context.fn();
+  delete context.fn;
+  return result;
+};
+</code></pre><p>Not like call() and apply(), the bind() creates a new function and sets the this keyword to the specified object.</p><blockquote><p>function.bind(thisArg, optionalArguments)</p></blockquote><pre><code class="language-javascript">Function.prototype.myBind = (context, ...args) =&gt; {
+  if (typeof this !== &quot;function&quot;) {
+    throw new TypeError(&quot;error&quot;);
+  }
+  context =
+    context === undefined || context === null ? window : Object(context);
+  self = this;
+  return (...bindArgs) =&gt; {
+    return self.apply(context, [...args, ...bindArgs)])
+};
+</code></pre><h2>Arrow Functions</h2><p>Arrow functions do not have their own <strong>this</strong> binding. Instead, they go up to the next level of execution.</p><p>It can be useful to use the arrow function in cases where you really want this to refer to the outer context. For example, if you had an event listener inside of a class, you would probably want this to refer to some value in the class.</p><hr/><p>Reference: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this">AWS S3 Doc</a>,
+<a href="https://blog.bitsrc.io/understanding-call-bind-and-apply-methods-in-javascript-33dbf3217be">Medium(JavaScript Fundmentals)</a></p>]]></content>
+        <author>
+            <name>Haochen Qi</name>
+            <uri>https://github.com/HaochenQ</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[How to Upload Files to AWS S3 in Node.js?]]></title>
+        <id>upload-files-to-s3-iwth-node</id>
+        <link href="https://MrMinBlack.github.io/zh-cn/blog/upload-files-to-s3-iwth-node"/>
+        <updated>2021-05-31T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[question]]></summary>
+        <content type="html"><![CDATA[<p><img src="/img/S3.jpg" alt="question"/></p><blockquote><p>Amazon Simple Storage Service is storage for the Internet. It is designed to make web-scale computing easier for developers. -- Amazon</p></blockquote><p>Simple Storage Service(S3) is a an object storage service provided by AWS in 2006. S3 provides developers with a distributed data storage service with high scalability, high durability and high availability. The data storage structure of S3 is very simple, which is a flat two-layer structure: one layer is a bucket, and the other layer is a storage object. A bucket is a way to classify data in S3, it is a container for data storage and every object needs to be stored in a certain bucket. It will become a part of the domain name for users to access data, so the name of the bucket must be unique.</p><p>Our Node Apps often need to store user data like images, audio files, documents ,etc into somewhere secure and easily accessible instead of on local server. This is when S3 comes in as a perfect option. In this blog, we will go through how to upload your files in AWS s3 buckets.</p><p><img src="/img/bucket.png" alt="question"/></p><h2>Create a S3 Bucket</h2><p>In this section, we will create a bucket on S3 for us to upload files in. To get start, you need to generate AWS Security Key Access Credentials first from your AWS Management console.</p><p><img src="/img/IAM.png" alt="question"/></p><p>On the AWS Services panel, find IAM and click to go IAM dashboard. Under the Access Management section, find Users &gt;&gt; Add User.
+<img src="/img/IAM-user.png" alt="question"/>
+Then follow the steps to create a programmatic access AWS user attached with <strong>AmazonS3FullAccess</strong> policy. <em>Save your access key ID and secret access key in a secure place as you won&#x27;t able to check them again.</em>
+<img src="/img/s3-permission.png" alt="question"/></p><p>Now let us create a bucket with a unique name. Similarly, find S3 On the AWS Services pane. On the dashboard, click <strong>Create bucket</strong> to create a new bucket with proper region and other default settings. After you create a bucket, we need to allow our client application to interact with our bucket. Go to Your Bucket &gt;&gt; Permissions &gt;&gt; Cross-origin resource sharing (CORS). Change the configuration as bellow.</p><pre><code class="language-json">[
+  {
+    &quot;AllowedHeaders&quot;: [&quot;*&quot;],
+    &quot;AllowedMethods&quot;: [&quot;POST&quot;, &quot;GET&quot;, &quot;PUT&quot;, &quot;DELETE&quot;, &quot;HEAD&quot;],
+    &quot;AllowedOrigins&quot;: [&quot;*&quot;],
+    &quot;ExposeHeaders&quot;: []
+  }
+]
+</code></pre><p>Now, We have a bucket up for us to play with. Alternatively, you can also create a bucket with AWS SDK tool. Simply felllow <a href="https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/s3-example-creating-buckets.html">here</a>.</p><h2>Create a Simple Node App</h2><p>Now let us interact with our created bucket. Before we create a S3 instance, make sure to put sensitive data in the environment variables, simply create a .env file and save your data in that file. Here I will use a library called dotenv to handle .env file, it will loads environment variables from a .env file into process.env.</p><pre><code>AWS_ACCESS_KEY_ID=Your AWS Access Key ID
+AWS_SECRET_ACCESS_KEY=Your AWS Secret Access Key
+S3_BUCKET=Your Bucket Name
+</code></pre><p>Then let&#x27;s create a S3 instance after we install all necessary dependencies with:</p><pre><code>$ npm i dotenv aws-sdk
+</code></pre><p>Create a file name with app.js, let&#x27;s write code in this file.</p><pre><code class="language-javascript">require(&quot;dotenv&quot;).config();
+
+const fs = require(&quot;fs&quot;);
+const AWS = require(&quot;aws-sdk&quot;);
+
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+});
+</code></pre><h2>Interact With Our Bucket</h2><p>With the S3 instance set up, we can now play with our bucket. We can upload files to our bucket, get all the files in our bucket and delete files.
+Before we upload the file, we need to read its contents in a buffer. After reading it, we can define the needed parameters for the file upload, such as Bucket, Key, and Body.Let&#x27;s see the code.</p><pre><code class="language-javascript">/**
+ * Upload files
+ **/
+const uploadToS3 = async (file) =&gt; {
+  // Read content from the file
+  const fileContent = fs.readFileSync(file);
+
+  // Setting up S3 upload parameters
+  const params = {
+    Bucket: process.env.S3_BUCKET,
+    Key: &quot;your_image.jpg&quot;, // File name you want to save as in S3
+    Body: fileContent,
+  };
+
+  // Uploading files to the bucket
+  s3.upload(params, function (err, data) {
+    if (err) {
+      throw err;
+    }
+    console.log(`File uploaded successfully. ${data.Location}`);
+  });
+};
+uploadToS3(&quot;your_image.jpg&quot;);
+</code></pre><p>If you want to list all objects in your bucket, you can use S3 <strong>listObjectsV2</strong> function.</p><pre><code class="language-javascript">/**
+ * List all objects in the bucket
+ */
+getlist = async () =&gt; {
+  const params = {
+    Bucket: process.env.S3_BUCKET,
+    Delimiter: &quot;&quot;,
+  };
+  try {
+    const response = await s3.listObjectsV2(params).promise();
+    this.setState({
+      list: response.Contents,
+      fetched: true,
+    });
+    console.log(this.state.list);
+  } catch (err) {
+    this.setState({
+      ifError: true,
+      errorCode: err.code,
+    });
+    console.log(&quot;S3 ERROR : &quot; + err.code);
+  }
+};
+consloe.log(getlist());
+</code></pre><p>Now run your js file to see the result.</p><pre><code>$node app.js
+</code></pre><h2>Conclusion</h2><p>In this blog, we created simple Node App and interact with our bucket. Nowadays, using a cloud storage service like AWS S3 is a very popular way to reduce storage pressure for servers as well as securly store user data.</p><hr/><p>Reference: <a href="https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/s3-example-creating-buckets.html">AWS S3 Doc</a></p>]]></content>
+        <author>
+            <name>Haochen Qi</name>
+            <uri>https://github.com/HaochenQ</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Shallow Copy vs. Deep Copy]]></title>
+        <id>understand-copy-in-js</id>
+        <link href="https://MrMinBlack.github.io/zh-cn/blog/understand-copy-in-js"/>
+        <updated>2021-04-14T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[question]]></summary>
+        <content type="html"><![CDATA[<p><img src="/img/question.jpg" alt="question"/>
+Objects are the basic blocks of JavaScript. An object is a collection of attributes, and an attribute is an association between a key (or name) and a value. Almost all objects in JavaScript are Object instances at the top of the prototype chain.</p><p>When it comes to copying objects in JavaScript, you need to know whether you need to do a shallow copying or a deep copying. In this article, we will go through these two different ways to copy objects.</p><h2>Shallow copy</h2><p><strong>Shallow copy</strong>: When using the assignment operator to copy a reference variable to a new reference variable, a shallow copy of the referenced object will be created. In short, a reference variable mainly stores the address of the object it refers to. After assigning the value of the old reference variable to the new reference variable, copy the address stored in the old reference variable to the new reference variable. This means that both the old reference variable and the new reference variable point to the same object in memory. As a result, if the state of the object changes through any reference variable, both will be reflected. Let&#x27;s see an example:</p><pre><code class="language-javascript">function example() {
+  &quot;use strict&quot;;
+
+  let obj1 = { a: 0, b: { c: 0 } };
+  let obj2 = Object.assign({}, obj1);
+  console.log(JSON.stringify(obj2)); // { &quot;a&quot;: 0, &quot;b&quot;: { &quot;c&quot;: 0}}
+
+  obj1.a = 1;
+  console.log(JSON.stringify(obj1)); // { &quot;a&quot;: 1, &quot;b&quot;: { &quot;c&quot;: 0}}
+  console.log(JSON.stringify(obj2)); // { &quot;a&quot;: 0, &quot;b&quot;: { &quot;c&quot;: 0}}
+
+  obj2.a = 2;
+  console.log(JSON.stringify(obj1)); // { &quot;a&quot;: 1, &quot;b&quot;: { &quot;c&quot;: 0}}
+  console.log(JSON.stringify(obj2)); // { &quot;a&quot;: 2, &quot;b&quot;: { &quot;c&quot;: 0}}
+
+  obj1.b.c = 3;
+  console.log(JSON.stringify(obj1)); // { &quot;a&quot;: 1, &quot;b&quot;: { &quot;c&quot;: 3}}
+  console.log(JSON.stringify(obj2)); // { &quot;a&quot;: 2, &quot;b&quot;: { &quot;c&quot;: 3}}
+}
+
+example();
+</code></pre><p>After ES6 released, we can also use <strong>spread operator</strong> to shallow copy objects.</p><pre><code class="language-javascript">function example() {
+  let obj1 = { a: 0, b: { c: 0 } };
+  let obj2 = { ...obj1 };
+  console.log(JSON.stringify(obj2)); // { &quot;a&quot;: 0, &quot;b&quot;: { &quot;c&quot;: 0}}
+  obj1.a = 4;
+  obj1.b.c = 4;
+  console.log(JSON.stringify(obj1)); // { &quot;a&quot;: 4, &quot;b&quot;: { &quot;c&quot;: 4}}
+  console.log(JSON.stringify(obj2)); // { &quot;a&quot;: 0, &quot;b&quot;: { &quot;c&quot;: 4}}
+}
+
+example();
+</code></pre><h2>Deep copy</h2><p><strong>Deep copy</strong>: Unlike shallow copy, deep copy copies all members of the old object, allocates a separate memory location for the new object, and then assigns the copied members to the new object. In this way, the two objects are independent of each other, and in the case of any modification to any one object, the other object is not affected. Similarly, if one of the objects is deleted, the other remains in memory. Now, to create a deep copy of the object in JavaScript, we use the JSON.parse() and JSON.stringify() methods. Let us see the example below.</p><pre><code class="language-javascript">function example() {
+  let obj1 = { a: 0, b: { c: 0 } };
+  let obj2 = JSON.parse(JSON.stringify(obj1));
+  obj1.a = 4;
+  obj1.b.c = 4;
+  console.log(JSON.stringify(obj1)); // { &quot;a&quot;: 4, &quot;b&quot;: { &quot;c&quot;: 4}}
+  console.log(JSON.stringify(obj2)); // { &quot;a&quot;: 0, &quot;b&quot;: { &quot;c&quot;: 0}}
+}
+
+example();
+</code></pre><h2>Use a JavaScript library to deep copy objects</h2><p>There are several javascript libraries can provide objects operation utilities like <strong>underscore</strong> and <strong>lodash</strong>. In this article, we will introduce you how to use <strong>lodash</strong> to deep copy objects.</p><p>Lodash is a JavaScript library that provides multiple utility functions, and one of the most commonly used functions in the Lodash library is the cloneDeep() method. This method helps to clone objects in depth, and can also clone the limitations of the JSON.stringify() method, that is, non-serializable properties.</p><pre><code class="language-javascript">const _ = require(&quot;lodash&quot;);
+
+function example() {
+  let obj1 = { a: 0, b: { c: 0 } };
+  let obj2 = _.cloneDeep(obj1);
+  obj1.a = 4;
+  obj1.b.c = 4;
+  console.log(JSON.stringify(obj1)); // { &quot;a&quot;: 4, &quot;b&quot;: { &quot;c&quot;: 4}}
+  console.log(JSON.stringify(obj2)); // { &quot;a&quot;: 0, &quot;b&quot;: { &quot;c&quot;: 0}}
+}
+
+example();
+</code></pre><h2>Conclusion</h2><p>Copying objects in JavaScript can be quite daunting especially if you’re new to JavaScript and don’t know your way around the language. Hopefully this article helped you understand and avoid future pitfalls you may encounter copying objects.</p><hr/><p>Reference: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign">MDN|Web Docs</a></p>]]></content>
+        <author>
+            <name>Haochen Qi</name>
+            <uri>https://github.com/HaochenQ</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Django project - A Twitter Like Web APP]]></title>
+        <id>djang0-blog</id>
+        <link href="https://MrMinBlack.github.io/zh-cn/blog/djang0-blog"/>
+        <updated>2021-02-13T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[A twitter like web app built with Django.]]></summary>
+        <content type="html"><![CDATA[<p>A twitter like web app built with Django.</p><h2>Description</h2><p>In this app, you can register an account, login and update your profile picture, and post and manage your content. Try the demo <a href="https://quiet-escarpment-41189.herokuapp.com/">here</a> with a testing account.</p><p>Username: TestUser</p><p>Password: testing321</p><p><img src="/files/django-blog.png" alt="screenshot"/></p>]]></content>
+        <author>
+            <name>Haochen Qi</name>
+            <uri>https://github.com/HaochenQ</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[What is Web Accessibility?]]></title>
+        <id>web-accessibility</id>
+        <link href="https://MrMinBlack.github.io/zh-cn/blog/web-accessibility"/>
+        <updated>2021-01-18T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[In this blog, we are going to learn web accessibility.]]></summary>
+        <content type="html"><![CDATA[<p>In this blog, we are going to learn web accessibility.</p><h2>What is Web Accessibility?</h2><blockquote><p>&quot;The power of the Web is in its universality. Access by everyone regardless of disability is an essential aspect&quot; - Tim Berners-Lee</p></blockquote><p>Web accessibility is the concept that technology need to be equally accessible for people with and without disabilites. The Web is fundamentally designed to work for all people, whatever their hardware, software, language, location, or ability. When the Web meets this goal, it is accessible to people with a diverse range of hearing, movement, sight, and cognitive ability.</p><p>Thus the impact of disability is radically changed on the Web because the Web removes barriers to communication and interaction that many people face in the physical world. However, when websites, applications, technologies, or tools are badly designed, they can create barriers that exclude people from using the Web.</p><h2>Who does Web Accessibility help?</h2><p>Accessibility supports social inclusion for people with disabilities as well as others, such as:</p><ul><li>older people</li><li>people in rural areas</li><li>people in developing countries</li></ul><p>Web accessibility encompasses all disabilities that affect access to the Web, including:</p><ul><li>auditory</li><li>cognitive</li><li>*<!-- -->neurological</li><li>physical</li><li>speech</li><li>visual</li></ul><p>Web accessibility also benefits people without disabilities, for example:</p><ul><li>people using mobile phones, smart watches, smart TVs, and other devices with small screens, different input modes, etc.</li><li>older people with changing abilities due to ageing</li><li>people with “temporary disabilities” such as a broken arm or lost glasses</li><li>people with “situational limitations” such as in bright sunlight or in an environment where they cannot listen to audio</li><li>people using a slow Internet connection, or who have limited or expensive bandwidth</li></ul><h2>Why Web Accessability is important?</h2><p>The Web is an increasingly important resource in many aspects of life: education, employment, government, commerce, health care, recreation, and more. It is essential that the Web be accessible in order to provide equal access and equal opportunity to people with diverse abilities. Access to information and communications technologies, including the Web, is defined as a basic human right in the United Nations Convention on the Rights of Persons with Disabilities (UN CRPD).</p><p>The Web offers the possibility of unprecedented access to information and interaction for many people with disabilities. That is, the accessibility barriers to print, audio, and visual media can be much more easily overcome through web technologies.</p><p>There is also a strong business case for accessibility. As shown in the previous section, accessible design improves overall user experience and satisfaction, especially in a variety of situations, across different devices, and for older users. Accessibility can enhance your brand, drive innovation, and extend your market reach.</p><p>Web accessibility is required by law in many situations.</p><h2>Making the Web Accessible</h2><p>Web accessibility depends on several components working together, including web technologies, web browsers and other &quot;user agents&quot;, authoring tools, and websites.</p><p>The W3C Web Accessibility Initiative (WAI) develops technical specifications, guidelines, techniques, and supporting resources that describe accessibility solutions. These are considered international standards for web accessibility; for example, WCAG 2.0 is also an ISO standard: ISO/IEC 40500.</p><hr/><p>Reference: <a href="https://www.w3.org/WAI/fundamentals/accessibility-intro/#what">W3C Accessibility Fundamentals</a></p>]]></content>
+        <author>
+            <name>Haochen Qi</name>
+            <uri>https://github.com/HaochenQ</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Cozy Space - A React Furniture Store]]></title>
+        <id>React Furniture Store</id>
+        <link href="https://MrMinBlack.github.io/zh-cn/blog/React Furniture Store"/>
+        <updated>2021-01-04T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[A online furniture store built with React and React hooks(useReduce and useContext).]]></summary>
+        <content type="html"><![CDATA[<p>A online furniture store built with React and React hooks(useReduce and useContext).</p><p>Design your dream home with our various morden furnitures.</p><p>Try the demo <a href="https://www.cozyspace.co">here</a>.</p><h2>Authentication with Auth0</h2><p>Simple sign up with your email or google account.</p><h2>A ScreenShot</h2><p><img src="/files/furniture-store.png" alt="screenshot"/></p>]]></content>
+        <author>
+            <name>Haochen Qi</name>
+            <uri>https://github.com/HaochenQ</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[A Simple Recipe React App]]></title>
+        <id>A_Simple_Recipe_React_App</id>
+        <link href="https://MrMinBlack.github.io/zh-cn/blog/A_Simple_Recipe_React_App"/>
+        <updated>2020-12-23T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Find your favorite food recipe! Click here to try the demo.]]></summary>
+        <content type="html"><![CDATA[<p>Find your favorite food recipe! Click <a href="https://recipe-app.haochenq.vercel.app/">here</a> to try the demo.</p><blockquote><p>Powered by EDAMAM</p></blockquote><h2>How to Use</h2><p>Search by the food type like pizza, noodles or even the flavour of food you like!<br/></p><p>Simply type the keywords in the search bar and click the seach button, your receipe is on the way!</p><h2>Screen shot</h2><p><img src="/files/Recipe-hub.png" alt="screenshot"/></p>]]></content>
+        <author>
+            <name>Haochen Qi</name>
+            <uri>https://github.com/HaochenQ</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[My First Post]]></title>
+        <id>first_blog</id>
+        <link href="https://MrMinBlack.github.io/zh-cn/blog/first_blog"/>
+        <updated>2020-11-27T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[欢迎来的我的博客。 This website is build with docusaurus.]]></summary>
+        <content type="html"><![CDATA[<p>欢迎来的我的博客。 This website is build with docusaurus.</p>]]></content>
+        <author>
+            <name>Haochen Qi</name>
+            <uri>https://github.com/HaochenQ</uri>
+        </author>
+    </entry>
+</feed>

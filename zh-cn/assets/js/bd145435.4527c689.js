@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkhaochen_blog=self.webpackChunkhaochen_blog||[]).push([[475],{591:function(s){s.exports=JSON.parse('{"allTagsPath":"/zh-cn/blog/tags","slug":"/zh-cn/blog/tags/web-accessibility","name":"Web Accessibility","count":1,"permalink":"/zh-cn/blog/tags/web-accessibility"}')}}]);

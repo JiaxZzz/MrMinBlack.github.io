@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkhaochen_blog=self.webpackChunkhaochen_blog||[]).push([[8578],{731:function(l){l.exports=JSON.parse('{"allTagsPath":"/zh-cn/blog/tags","slug":"/zh-cn/blog/tags/shallow-copy","name":"Shallow Copy","count":1,"permalink":"/zh-cn/blog/tags/shallow-copy"}')}}]);

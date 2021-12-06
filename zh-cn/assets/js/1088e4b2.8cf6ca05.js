@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkhaochen_blog=self.webpackChunkhaochen_blog||[]).push([[6235],{7001:function(n){n.exports=JSON.parse('{"allTagsPath":"/zh-cn/blog/tags","slug":"/zh-cn/blog/tags/furniture","name":"furniture","count":1,"permalink":"/zh-cn/blog/tags/furniture"}')}}]);
