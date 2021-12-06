@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkhaochen_blog=self.webpackChunkhaochen_blog||[]).push([[949],{662:function(e){e.exports=JSON.parse('{"allTagsPath":"/blog/tags","slug":"heroku","name":"heroku","count":1,"permalink":"/blog/tags/heroku"}')}}]);

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkhaochen_blog=self.webpackChunkhaochen_blog||[]).push([[2093],{7453:function(e){e.exports=JSON.parse('{"allTagsPath":"/blog/tags","slug":"node-js","name":"node.js","count":1,"permalink":"/blog/tags/node-js"}')}}]);

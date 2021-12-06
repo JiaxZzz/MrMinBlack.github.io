@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://MrMinBlack.github.io/blog</id>
+    <title>MinBlack Blog</title>
+    <updated>2021-06-15T00:00:00.000Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://MrMinBlack.github.io/blog"/>
+    <subtitle>MinBlack Blog</subtitle>
+    <icon>https://MrMinBlack.github.io/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[Understanding This, Bind, Call and Apply in JavaScript]]></title>
+        <id>understand-this-in-one-article</id>
+        <link href="https://MrMinBlack.github.io/blog/understand-this-in-one-article"/>
+        <updated>2021-06-15T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[question]]></summary>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[How to Upload Files to AWS S3 in Node.js?]]></title>
+        <id>upload-files-to-s3-iwth-node</id>
+        <link href="https://MrMinBlack.github.io/blog/upload-files-to-s3-iwth-node"/>
+        <updated>2021-05-31T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[question]]></summary>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Shallow Copy vs. Deep Copy]]></title>
+        <id>understand-copy-in-js</id>
+        <link href="https://MrMinBlack.github.io/blog/understand-copy-in-js"/>
+        <updated>2021-04-14T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[question]]></summary>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Django project - A Twitter Like Web APP]]></title>
+        <id>djang0-blog</id>
+        <link href="https://MrMinBlack.github.io/blog/djang0-blog"/>
+        <updated>2021-02-13T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[A twitter like web app built with Django.]]></summary>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[What is Web Accessibility?]]></title>
+        <id>web-accessibility</id>
+        <link href="https://MrMinBlack.github.io/blog/web-accessibility"/>
+        <updated>2021-01-18T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[In this blog, we are going to learn web accessibility.]]></summary>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Cozy Space - A React Furniture Store]]></title>
+        <id>React Furniture Store</id>
+        <link href="https://MrMinBlack.github.io/blog/React Furniture Store"/>
+        <updated>2021-01-04T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[A online furniture store built with React and React hooks(useReduce and useContext).]]></summary>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[A Simple Recipe React App]]></title>
+        <id>A_Simple_Recipe_React_App</id>
+        <link href="https://MrMinBlack.github.io/blog/A_Simple_Recipe_React_App"/>
+        <updated>2020-12-23T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Find your favorite food recipe! Click here to try the demo.]]></summary>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[My First Post]]></title>
+        <id>first_blog</id>
+        <link href="https://MrMinBlack.github.io/blog/first_blog"/>
+        <updated>2020-11-27T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Welcome to my personal blog! This website is build with docusaurus.]]></summary>
+    </entry>
+</feed>

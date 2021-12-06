@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkhaochen_blog=self.webpackChunkhaochen_blog||[]).push([[4225],{939:function(e){e.exports=JSON.parse('{"allTagsPath":"/blog/tags","slug":"deep-copy","name":"deep copy","count":1,"permalink":"/blog/tags/deep-copy"}')}}]);

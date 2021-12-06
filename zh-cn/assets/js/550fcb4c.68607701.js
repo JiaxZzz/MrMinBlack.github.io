@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkhaochen_blog=self.webpackChunkhaochen_blog||[]).push([[1145],{337:function(a){a.exports=JSON.parse('{"allTagsPath":"/zh-cn/blog/tags","slug":"javascript","name":"javascript","count":1,"permalink":"/zh-cn/blog/tags/javascript"}')}}]);
